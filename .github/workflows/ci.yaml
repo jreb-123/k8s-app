@@ -1,18 +1,45 @@
 name: CI
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 1. Clonar el repo
       - uses: actions/checkout@v4
+
+      # 2. Configurar Docker Buildx
       - uses: docker/setup-buildx-action@v3
+
+      # 3. Login a Docker Hub
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 4. Build y push de la imagen
       - uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./docker/Dockerfile
+          file: docker/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-app:latest
+
+      # 5. Instalar Helm
+      - name: Install Helm
+        run: curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      # 6. Lint del chart
+      - name: Helm Lint
+        run: helm lint charts/app
+
+      # 7. Renderizar el chart a YAML
+      - name: Helm Template
+        run: helm template charts/app > rendered.yaml
+
+      # 8. Validación "dry-run" con kubectl
+      - name: Kube dry-run
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y kubectl
+          kubectl apply --dry-run=client -f rendered.yaml
