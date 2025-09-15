@@ -62,4 +62,4 @@ jobs:
       # 9. Rollout check
       - name: Wait for rollout
         run: |
-          kubectl rollout status deployment/k8sapp --timeout=120s
+          kubectl rollout status deployment/k8s-app --timeout=120s
