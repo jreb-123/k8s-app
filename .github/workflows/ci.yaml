@@ -45,3 +45,21 @@ jobs:
       # 6. Validar YAML
       - name: Validate YAML syntax
         run: yamllint rendered.yaml || true
+
+    # 7. Crear cluster KinD
+      - name: Create KinD cluster
+        uses: helm/kind-action@v1
+
+      # 8. Deploy con Helm en KinD
+      - name: Deploy test
+        run: |
+          kubectl cluster-info
+          helm upgrade --install app charts/app \
+            --set image.repository=${{ secrets.DOCKERHUB_USERNAME }}/k8s-app \
+            --set image.tag=latest
+          kubectl get pods,svc
+
+      # 9. Rollout check
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/app --timeout=120s
