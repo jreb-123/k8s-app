@@ -33,8 +33,9 @@ jobs:
           context: .               # ⚠ Importante: usa la raíz del repo
           file: ./docker/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-app:latest
-                ${{ secrets.DOCKERHUB_USERNAME }}/k8s-app:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/k8s-app:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/k8s-app:${{ github.sha }}
 
       # 5. Render Helm chart
       - name: Render Helm chart
