@@ -2,8 +2,9 @@ replicaCount: 2
 
 image:
   repository: nginx
-  tag: alpine
+  tag: latest
   pullPolicy: IfNotPresent
+  APP_TAG: ""
 
 service:
   type: NodePort
