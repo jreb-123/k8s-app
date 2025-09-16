@@ -72,3 +72,7 @@ Si quieres usar tags/versiones específicas, puedes extender el workflow para et
 ## Notas
 - El chart por defecto usa `nginx:alpine`. En CI, al publicar `${DOCKERHUB_USERNAME}/k8s-app:latest`, recuerda actualizar `charts/app/values.yaml` o pasar `--set image.repository=...` al instalar con Helm.
 - El `Service` por defecto es `NodePort` en `30080`. Ajusta según tu entorno (LoadBalancer en cloud, etc.).
+
+# k8s-app
+Cambio mínimo para disparar CI
+
