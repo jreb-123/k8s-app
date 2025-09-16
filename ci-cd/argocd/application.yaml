@@ -12,7 +12,7 @@ spec:
     helm:
       values: |
         image:
-          repository: jreb-123/k8s-app
+          repository: jrebaza01/k8s-app
           tag: latest
   destination:
     server: https://kubernetes.default.svc
