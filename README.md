@@ -74,5 +74,5 @@ Si quieres usar tags/versiones específicas, puedes extender el workflow para et
 - El `Service` por defecto es `NodePort` en `30080`. Ajusta según tu entorno (LoadBalancer en cloud, etc.).
 
 # k8s-app
-Cambio mínimo para disparar CI
+Cambio mínimo para disparar 
 
