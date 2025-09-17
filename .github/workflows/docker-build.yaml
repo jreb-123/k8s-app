@@ -1,0 +1,41 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main   # se ejecuta al hacer push en main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set image tag
+        id: vars
+        run: echo "TAG=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t jrebaza01/k8s-app:${TAG} .
+          docker push jrebaza01/k8s-app:${TAG}
+
+      - name: Update values.yaml
+        run: |
+          sed -i "s|tag:.*|tag: ${TAG}|g" charts/app/values.yaml
+
+      - name: Commit updated values.yaml
+        run: |
+          git config --global user.email "ci-bot@example.com"
+          git config --global user.name "CI Bot"
+          git add charts/app/values.yaml
+          git commit -m "Update image tag to ${TAG}"
+          git push
