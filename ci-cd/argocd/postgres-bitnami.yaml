@@ -8,11 +8,17 @@ spec:
   source:
     repoURL: 'https://charts.bitnami.com/bitnami'
     chart: postgresql
-    targetRevision: '16.7.27'   # versión de ArtifactHub
+    targetRevision: '16.7.27'
     helm:
       releaseName: postgres-demo
-      valueFiles:
-        - values/values-postgres.yaml
+      values: |
+        auth:
+          username: admin
+          password: admin123
+          database: mydb
+        primary:
+          persistence:
+            enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: postgres-demo
@@ -20,3 +26,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
