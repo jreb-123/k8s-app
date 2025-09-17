@@ -32,10 +32,13 @@ jobs:
         run: |
           sed -i "s|tag:.*|tag: ${TAG}|g" charts/app/values.yaml
 
-      - name: Commit updated values.yaml
+     - name: Commit updated values.yaml
         run: |
           git config --global user.email "ci-bot@example.com"
           git config --global user.name "CI Bot"
           git add charts/app/values.yaml
-          git commit -m "Update image tag to ${TAG}"
-          git push
+          git commit -m "Update image tag to ${TAG}" || echo "No changes to commit"
+          git push origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
