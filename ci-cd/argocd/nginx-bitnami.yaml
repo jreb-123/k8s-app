@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-bitnami
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    chart: nginx
+    targetRevision: '15.16.1'   # última versión estable en ArtifactHub (ejemplo)
+    helm:
+      releaseName: nginx-demo
+      valueFiles:
+        - values/values-nginx.yaml   # archivo en tu GitHub
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nginx-demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

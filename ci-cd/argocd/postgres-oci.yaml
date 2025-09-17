@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-oci
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'oci://registry-1.docker.io/bitnamicharts'
+    chart: postgresql
+    targetRevision: '16.7.27'   # etiqueta OCI
+    helm:
+      releaseName: postgres-oci
+      valueFiles:
+        - values/values-postgres-oci.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgres-oci
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

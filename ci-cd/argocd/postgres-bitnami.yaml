@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-bitnami
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://charts.bitnami.com/bitnami'
+    chart: postgresql
+    targetRevision: '16.7.27'   # versión de ArtifactHub
+    helm:
+      releaseName: postgres-demo
+      valueFiles:
+        - values/values-postgres.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgres-demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

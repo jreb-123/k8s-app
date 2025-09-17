@@ -1,0 +1,7 @@
+auth:
+  username: ociadmin
+  password: oci123
+  database: ocidb
+primary:
+  persistence:
+    enabled: false
